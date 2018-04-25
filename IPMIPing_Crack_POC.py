@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import socket
+import logging
+
+
+timeout = 3
+socket.setdefaulttimeout(timeout)
 
 def STRING_TO_BINARY(content):
     """将文本流转换成二进制流"""
@@ -26,6 +31,7 @@ def SEND_IPMI_PING_PACKET(ip,port=623):
     packet_data = "0600F006000011BE80100000"#IPMIPing报文格式
     socks = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)#使用UDP发送
     socks.sendto(STRING_TO_BINARY(packet_data),(ip,port))
+
     try:
         data,addr = socks.recvfrom(1024)
     except Exception,reason:
@@ -53,5 +59,6 @@ if __name__ == '__main__':
     107.150.184.170
     198.46.234.214
     46.23.68.37
+    nc -v -l -p 623 -u -s 192.168.100.64
     '''
-    SEND_IPMI_PING_PACKET(ip='198.46.234.214',port=623)
+    SEND_IPMI_PING_PACKET(ip='192.168.100.64',port=623)
